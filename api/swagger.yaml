@@ -1,0 +1,131 @@
+---
+swagger: "2.0"
+info:
+  description: "A service that is able to instantiate Docker images (here reffered\
+    \ to as 'step containers') on AWS EC2 instances. The service will create the underlying\
+    \ EC2 instance as well. The AWS integration is implemented using the GoF Strategy\
+    \ pattern. This provides developers with the ability to add other providers later\
+    \ on."
+  version: "1.0.0"
+  title: "Step Service"
+  license:
+    name: "MIT"
+    url: "http://opensource.org/licenses/MIT"
+basePath: "/api"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /stepContainers:
+    get:
+      description: "Returns all active step containers"
+      operationId: "stepContainersGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/stepContainerData"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a new step container and provides the user with the container\
+        \ secret. This will be needed to manage the container. The 'remarks' element\
+        \ can be used to give additional hints onto the intended use of the step container."
+      operationId: "stepContainersPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Additional information on the step container that is to be created"
+        required: false
+        schema:
+          $ref: "#/definitions/stepContainerCreationData"
+      responses:
+        201:
+          description: "step container created"
+          schema:
+            $ref: "#/definitions/stepContainerData"
+      x-swagger-router-controller: "Default"
+  /{stepContainerName}:
+    get:
+      description: "Returns informations on the step container"
+      operationId: "stepContainerNameGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "stepContainerName"
+        in: "path"
+        description: "Name of the step container"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/stepContainerData"
+        404:
+          description: "step container not found"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Terminates the step container"
+      operationId: "stepContainerNameDELETE"
+      parameters:
+      - name: "stepContainerName"
+        in: "path"
+        description: "Name of the step container"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "container terminated"
+        404:
+          description: "step container not found"
+      x-swagger-router-controller: "Default"
+definitions:
+  stepContainerData:
+    type: "object"
+    properties:
+      stepContainerName:
+        type: "string"
+      containerImage:
+        type: "string"
+      ports:
+        type: "string"
+      remarks:
+        type: "string"
+      created:
+        type: "string"
+        format: "date-time"
+      dnsUrl:
+        type: "string"
+  stepContainerCreationData:
+    type: "object"
+    properties:
+      keypairName:
+        type: "string"
+        maxLength: 50
+      dockerImageName:
+        type: "string"
+        maxLength: 50
+      portsToExpose:
+        type: "string"
+        description: "comma-separated list of port numbers"
+        maxLength: 50
+      remarks:
+        type: "string"
+        maxLength: 50
+parameters:
+  stepContainerNamePathParam:
+    name: "stepContainerName"
+    in: "path"
+    description: "Name of the step container"
+    required: true
+    type: "string"

@@ -1,0 +1,22 @@
+{
+  "name": "bt-step-service",
+  "version": "1.0.0",
+  "description": " A service that can instantiate docker containers on AWS EC2 instances.",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },  
+  "keywords": [
+    "swagger"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.5.0",
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "swagger-tools": "0.10.1",
+    "uuid": "^2.0.2"
+  }
+}

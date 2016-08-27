@@ -1,0 +1,22 @@
+var config = {};
+
+config.encryption = {};
+config.encryption.pathPrivateKey = '/path/to/privkey.pem';
+config.encryption.pathPublicKeyCert = '/path/to/certificate.pem';
+config.encryption.pathIntermediateCert = '/path/to/intermediate.pem';
+
+// Choose one of
+// - Default (only implementation stubs)
+// - AWSEC2 (compute using AWS EC2 instances)
+config.computingStrategyToUse = 'AWSEC2';
+
+config.computingStrategySettings = {};
+config.computingStrategySettings.Default = {};
+config.computingStrategySettings.AWSEC2 = {};
+config.computingStrategySettings.AWSEC2.accessKeyId = 'accesskey';
+config.computingStrategySettings.AWSEC2.secretAccessKey = 'secret';
+config.computingStrategySettings.AWSEC2.region = 'region-identifier';
+config.computingStrategySettings.AWSEC2.coreOsAmi = 'ami-identifier';
+config.computingStrategySettings.AWSEC2.instanceType = 'instance-identifier';
+
+module.exports = config;
